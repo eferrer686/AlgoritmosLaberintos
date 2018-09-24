@@ -23,7 +23,7 @@ for line in fileinput.input():
         finish = line
     if cont>2:
         #Leer laberinto quitando el caracter "Enter"
-        maze.append(line.replace("\n",''))
+        maze.append(list(map(int, line.replace("\n",''))))
     cont += 1
 
 #Voltear laberinto sobre el eje x
@@ -57,8 +57,13 @@ finish = getNumbers(finish)
 
 #Imprime los valores ya en Int
 print(size)
-print(begin)
+print(begin[0])
 print(finish)
+
+
+print(maze[begin[0]][begin[1]])
+
+
 
 
 
