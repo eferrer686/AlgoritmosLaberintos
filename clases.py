@@ -113,28 +113,28 @@ class Node(object):
         return int(self.left.x - self.x)
     
     def closestUp(self,nodes):
-        dist=0
+        dist=float('Inf')
         for n in nodes:
             temp = n.y-self.y
             if  n.x == self.x and temp < dist and temp > 0:
                 self.up = n
         return True
     def closestDown(self,nodes):
-        dist=0
+        dist=float('Inf')
         for n in nodes:
             temp = n.y-self.y
             if  n.x == self.x and temp < dist and temp < 0:
                 self.up = n
         return True
     def closestLeft(self,nodes):
-        dist=0
+        dist=float('Inf')
         for n in nodes:
             temp = n.x-self.x
             if  n.y == self.y and temp < dist and temp < 0:
                 self.up = n
         return True
     def closestRight(self,nodes):
-        dist=0
+        dist=float('Inf')
         for n in nodes:
             temp = n.x-self.x
             if  n.y == self.y and temp < dist and temp > 0:
