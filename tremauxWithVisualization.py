@@ -3,6 +3,7 @@ size = ''
 begin = []
 finish = []
 maze = []
+solutionPath = ''  
 
 cont = 0
 
@@ -27,8 +28,9 @@ for line in fileinput.input():
 maze.reverse()
 print(maze)
 
-#Create a marker and the right path matrix
+#Crear marcador de camino recorrido
 pathTracer = [[0]*len(maze[0]) for _ in range(len(maze))]
+#Crear marcador de camino correcto
 rightPath = [[0]*len(maze[0]) for _ in range(len(maze))]
 
 #Funcion que encuentra 2 numeros separados por uno o varios espacios
@@ -50,14 +52,30 @@ def getNumbers(text):
     r.append(int(''.join(s[1])))
     return r
 
-#Just to give some space
+#Un poco de espacio
 print()
 print()
 
-#Convert begin and finish to list of integers
+#Transformar begin y finish
 begin = getNumbers(begin)
 finish = getNumbers(finish)
 
+#Ajustar la matriz a la orientación del sistema en la web
+maze = maze[::-1]
+
+#Ajusta coordenadas de los puntos a la orientación de la matriz en el sistema de prueba
+def adjustCoordinates(coordinates):
+    aux = coordinates[1]
+    coordinates[1] = coordinates[0]
+    coordinates[0] = (len(maze)-1) - aux
+    return coordinates
+
+#Ajustar begin y finish
+begin = adjustCoordinates(begin)
+finish = adjustCoordinates(finish)
+
+#SOLO PARA VISUALIZARLO, BORRAR DESPUÉS
+#Imprime matrix
 def printMaze(maze, begin, finish, pathTracer):
     print("Starting point: (" + str(begin[0]) + ", " + str(begin[1]) + ")")
     print("Finish point:   (" + str(finish[0]) + ", " + str(finish[1]) + ")")
@@ -71,6 +89,7 @@ def printMaze(maze, begin, finish, pathTracer):
     for row in maze:
         print(row)
 
+#Algoritmo de Tremaux
 def tremaux(x, y):
     #If finish point is reached, return true
     if x == finish[0] and y == finish[1]:
@@ -101,6 +120,8 @@ def tremaux(x, y):
             return True
     return False
 
+#SOLO PARA VISUALIZARLO, BORRAR DESPUÉS
+#Imprimir solución
 def showSolution(begin):
     if tremaux(begin[0], begin[1]):
         #Convert finish point to 1
@@ -113,3 +134,40 @@ def showSolution(begin):
 
 printMaze(maze, begin, finish, pathTracer)
 showSolution(begin)
+
+print(begin[0])
+print(begin[1])
+print(begin[0])
+print(begin[1]+1)
+print(rightPath[begin[0]][begin[1]+1]+rightPath[begin[0]][begin[1]])
+
+def printSolution(begin, rightpath, solutionPath): 
+    while begin != finish:
+        if rightpath[begin[0]][begin[1]+1] + rightpath[begin[0]][begin[1]] == 2:
+            solutionPath = solutionPath + "R"
+            rightpath[begin[0]][begin[1]] = 0
+            begin[0] = begin[0]
+            begin[1] = begin[1]+1
+        else:
+            if rightpath[begin[0]+1][begin[1]] + rightpath[begin[0]][begin[1]] == 2:
+                solutionPath = solutionPath + "D"
+                rightpath[begin[0]][begin[1]] = 0
+                begin[0] = begin[0]+1
+                begin[1] = begin[1]
+            else:
+                if rightpath[begin[0]][begin[1]-1] + rightpath[begin[0]][begin[1]] == 2:
+                    solutionPath = solutionPath + "L"
+                    rightpath[begin[0]][begin[1]] = 0                    
+                    begin[0] = begin[0]
+                    begin[1] = begin[1]-1
+                else:
+                    if rightpath[begin[0]-1][begin[1]] + rightpath[begin[0]][begin[1]] == 2:
+                        solutionPath = solutionPath + "U"
+                        rightpath[begin[0]][begin[1]] = 0                        
+                        begin[0] = begin[0]-1
+                        begin[1] = begin[1]
+    print(solutionPath)
+printSolution(begin, rightPath, solutionPath)
+
+
+
