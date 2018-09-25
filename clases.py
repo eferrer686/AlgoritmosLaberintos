@@ -20,7 +20,7 @@ class Graph(object):
 
     #Funcion que crea los nodos a partir de un arreglo de 0s y 1s
     def createNodes(self, maze):
-        nodos = []
+        nodes = []
         #Iterar sobre renglones
         for y in range(len(maze)):
             #iterar sobre columnas
@@ -56,20 +56,36 @@ class Graph(object):
                     #Busqueda de areas de interes
                     #----Basicamente que se encuentre un angulo recto
                     if (right and down) or (down and left) or (left and up) or (up and right):
-                        nodos.append(Node(x,y,None,None,None,None))
+                        nodes.append(Node(x,y,None,None,None,None))
                        
                     elif self.onlyOne(up,right,left,down):
-                        nodos.append(Node(x,y,None,None,None,None))
-                        
-        return nodos
+                        nodes.append(Node(x,y,None,None,None,None))
+        self.mapNodes(nodes)
 
+    def mapNodes(self,nodes):
+        for n in nodes:
+            if n == self.begin:
+                self.begin.closestRight(nodes)
+                self.begin.closestLeft(nodes)
+                self.begin.closestUp(nodes)
+                self.begin.closestDown(nodes)
+            elif n == self.finish:
+                self.finish.closestRight(nodes)
+                self.finish.closestLeft(nodes)
+                self.finish.closestUp(nodes)
+                self.finish.closestDown(nodes)
+            else:
+                n.closestRight(nodes)
+                n.closestLeft(nodes)
+                n.closestUp(nodes)
+                n.closestDown(nodes)
 
 
 class Node(object):
     #Funcion constructora
     def __init__(self,x,y,up,down,left,right):
-        self.x = x
-        self.y = y
+        self.x = int(x)
+        self.y = int(y)
         self.up = up
         self.down = down
         self.left = left
@@ -79,6 +95,53 @@ class Node(object):
     #print(Node)
     def __repr__(self):
         return str([self.x,self.y])
+
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
+
+    def __ne__(self, other):
+        return self.x != other.x or self.y != other.y
+      
+
+    def distUp(self):
+        return int(self.up.y - self.y)
+    def distDown(self):
+        return int(self.down.y - self.y)
+    def distRight(self):
+        return int(self.right.x - self.x)
+    def distLeft(self):
+        return int(self.left.x - self.x)
+    
+    def closestUp(self,nodes):
+        dist=0
+        for n in nodes:
+            temp = n.y-self.y
+            if  n.x == self.x and temp < dist and temp > 0:
+                self.up = n
+        return True
+    def closestDown(self,nodes):
+        dist=0
+        for n in nodes:
+            temp = n.y-self.y
+            if  n.x == self.x and temp < dist and temp < 0:
+                self.up = n
+        return True
+    def closestLeft(self,nodes):
+        dist=0
+        for n in nodes:
+            temp = n.x-self.x
+            if  n.y == self.y and temp < dist and temp < 0:
+                self.up = n
+        return True
+    def closestRight(self,nodes):
+        dist=0
+        for n in nodes:
+            temp = n.x-self.x
+            if  n.y == self.y and temp < dist and temp > 0:
+                self.up = n
+        return True
+    
+        
                 
 
 import fileinput
@@ -109,9 +172,38 @@ for line in fileinput.input():
 #Voltear laberinto sobre el eje x
 maze.reverse()
 
+#Funcion que encuentra 2 numeros separados por uno o varios espacios
+def getNumbers(text):
+    s=[]
+    s.append([])
+    s.append([])
+    flag = True
+    for c in text:
+        if c != ' ' and flag:
+            s[0] += c
+        elif c != ' ' and c != '\n':
+            s[1].append(c)
+        else:
+            flag = False
+
+    r = []
+    r.append(int(''.join(s[0])))
+    r.append(int(''.join(s[1])))
+    return r
+
+
+size = getNumbers(size)
+begin = getNumbers(begin)
+finish = getNumbers(finish)
+
 #Crear Grafo
+begin = Node(begin[0],begin[1],None,None,None,None)
+finish = Node(finish[0],finish[1],None,None,None,None)
 g = Graph(begin,finish)
 #Convertir maze a nodos e imprimirlos
-print(g.createNodes(maze))
+g.createNodes(maze)
 #imprimir info de grafo
-print(g)
+print(g.begin.down)
+print(g.begin.up)
+print(g.begin.left)
+print(g.begin.right)
