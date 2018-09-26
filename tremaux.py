@@ -1,3 +1,6 @@
+import time
+start_time = time.time()
+
 import fileinput
 size = ''
 begin = []
@@ -115,3 +118,7 @@ path = tremaux(begin[0], begin[1])
 
 print(path[::-1])
 
+#Imprime el tiempo que tomo todo el proceso
+elapsed_time = time.time() - start_time
+print("Time:")
+print(elapsed_time)

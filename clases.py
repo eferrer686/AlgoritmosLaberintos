@@ -79,6 +79,8 @@ class Graph(object):
                 n.closestLeft(nodes)
                 n.closestUp(nodes)
                 n.closestDown(nodes)
+    def tremaux():
+
 
 
 class Node(object):
@@ -102,7 +104,7 @@ class Node(object):
     def __ne__(self, other):
         return self.x != other.x or self.y != other.y
       
-
+    #Distancia a nodos
     def distUp(self):
         return int(self.up.y - self.y)
     def distDown(self):
@@ -208,7 +210,8 @@ g = Graph(begin,finish)
 #Convertir maze a nodos e imprimirlos
 g.createNodes(maze)
 #imprimir info de grafo
-print(g.begin.down)
-print(g.begin.up)
-print(g.begin.left)
-print(g.begin.right.up.up)
+maze = maze[::-1]
+for m in maze:
+    print(m)
+
+print(g.begin.right.up)
