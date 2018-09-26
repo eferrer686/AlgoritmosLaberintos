@@ -1,3 +1,6 @@
+import time
+start_time = time.time()
+
 class Graph(object):
     
     #Funcion constructora
@@ -60,26 +63,27 @@ class Graph(object):
                        
                     elif self.onlyOne(up,right,left,down):
                         nodes.append(Node(x,y,None,None,None,None))
-        self.mapNodes(nodes)
+        self.mapNodes(nodes,maze)
 
-    def mapNodes(self,nodes):
+    def mapNodes(self,nodes,maze):
         for n in nodes:
             if n == self.begin:
                 self.begin.closestRight(nodes)
                 self.begin.closestLeft(nodes)
                 self.begin.closestUp(nodes)
-                self.begin.closestDown(nodes)
+                self.begin.closestDown(nodes,maze)
             elif n == self.finish:
                 self.finish.closestRight(nodes)
                 self.finish.closestLeft(nodes)
                 self.finish.closestUp(nodes)
-                self.finish.closestDown(nodes)
+                self.finish.closestDown(nodes,maze)
             else:
                 n.closestRight(nodes)
                 n.closestLeft(nodes)
                 n.closestUp(nodes)
-                n.closestDown(nodes)
+                n.closestDown(nodes,maze)
     def tremaux():
+        return None
 
 
 
@@ -119,15 +123,27 @@ class Node(object):
         dist=float('Inf')
         for n in nodes:
             temp = n.y-self.y
+            #Checar si hay paredes
+            wall = True
+            for y in range(n.y,self.y):
+                if maze[y][n.x]==1:
+                    wall=False
+
             if  n.x == self.x and temp < dist and temp > 0:
                 self.up = n
                 dist = temp
         return True
-    def closestDown(self,nodes):
+    def closestDown(self,nodes,maze):
         dist=float('Inf')
         for n in nodes:
             temp = n.y-self.y
-            if  n.x == self.x and temp < dist and temp < 0:
+            #Checar si hay paredes
+            wall = True
+            for y in range(self.y,n.y):
+                if maze[y][n.x]==1:
+                    wall=False
+            #Ver si es el nodo mas cercano
+            if  wall and n.x == self.x and temp < dist and temp < 0:
                 self.down = n
                 dist = temp
         return True
@@ -135,7 +151,13 @@ class Node(object):
         dist=float('Inf')
         for n in nodes:
             temp = n.x-self.x
-            if  n.y == self.y and temp < dist and temp < 0:
+            #Checar si hay paredes
+            wall = True
+            for x in range(n.x,self.x):
+                
+                if maze[n.y][x]==1:
+                    wall=False
+            if  wall and n.y == self.y and temp < dist and temp < 0:
                 self.left = n
                 dist = temp
         return True
@@ -143,6 +165,11 @@ class Node(object):
         dist=float('Inf')
         for n in nodes:
             temp = n.x-self.x
+            #Checar si hay paredes
+            wall = True
+            for x in range(self.x,n.x):
+                if maze[n.y][x]==1:
+                    wall=False
             if  n.y == self.y and temp < dist and temp > 0:
                 self.right = n
                 dist = temp
@@ -211,7 +238,17 @@ g = Graph(begin,finish)
 g.createNodes(maze)
 #imprimir info de grafo
 maze = maze[::-1]
+
 for m in maze:
     print(m)
+print(begin)
+print("Begin nodes:")
+print(g.begin.right)
+print(g.begin.left)
+print(g.begin.up)
+print(g.begin.down)
 
-print(g.begin.right.up)
+#Imprime el tiempo que tomo todo el proceso
+elapsed_time = time.time() - start_time
+print("Time:")
+print(elapsed_time)
