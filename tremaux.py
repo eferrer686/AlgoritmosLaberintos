@@ -26,7 +26,7 @@ for line in fileinput.input():
 
 #Voltear laberinto sobre el eje x
 maze.reverse()
-print(maze)
+
 
 #Crear marcador de camino recorrido
 pathTracer = [[0]*len(maze[0]) for _ in range(len(maze))]
@@ -52,9 +52,7 @@ def getNumbers(text):
     r.append(int(''.join(s[1])))
     return r
 
-#Un poco de espacio
-print()
-print()
+
 
 #Transformar begin y finish
 begin = getNumbers(begin)
@@ -73,21 +71,6 @@ def adjustCoordinates(coordinates):
 #Ajustar begin y finish
 begin = adjustCoordinates(begin)
 finish = adjustCoordinates(finish)
-
-#SOLO PARA VISUALIZARLO, BORRAR DESPUÉS
-#Imprime matrix
-def printMaze(maze, begin, finish, pathTracer):
-    print("Starting point: (" + str(begin[0]) + ", " + str(begin[1]) + ")")
-    print("Finish point:   (" + str(finish[0]) + ", " + str(finish[1]) + ")")
-    #Starting point displayed on maze
-    maze[begin[0]][begin[1]] = 2
-    #Finish point displayed on maze
-    maze[finish[0]][finish[1]] = 3
-    print("Maze:")
-    print("Start = 2")
-    print("Finish: 3")
-    for row in maze:
-        print(row)
 
 #Algoritmo de Tremaux
 def tremaux(x, y):
@@ -127,22 +110,8 @@ def tremaux(x, y):
 
 #SOLO PARA VISUALIZARLO, BORRAR DESPUÉS
 #Imprimir solución
-def showSolution(begin):
-    path = tremaux(begin[0], begin[1])
-    
-    if path != None:
-        #Convert finish point to 1
-        rightPath[finish[0]][finish[1]] = 1
-        print("Solution:")
-        print(path[::-1])
-        for row in rightPath:
-            print(row)
-    else:
-        print("No solution")
 
-printMaze(maze, begin, finish, pathTracer)
-showSolution(begin)
+path = tremaux(begin[0], begin[1])
 
-
-
+print(path[::-1])
 
