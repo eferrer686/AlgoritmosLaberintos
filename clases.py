@@ -112,33 +112,38 @@ class Node(object):
     def distLeft(self):
         return int(self.left.x - self.x)
     
+    #Busca el nodo mas cercano, si es que hay uno, en una direccion
     def closestUp(self,nodes):
         dist=float('Inf')
         for n in nodes:
             temp = n.y-self.y
             if  n.x == self.x and temp < dist and temp > 0:
                 self.up = n
+                dist = temp
         return True
     def closestDown(self,nodes):
         dist=float('Inf')
         for n in nodes:
             temp = n.y-self.y
             if  n.x == self.x and temp < dist and temp < 0:
-                self.up = n
+                self.down = n
+                dist = temp
         return True
     def closestLeft(self,nodes):
         dist=float('Inf')
         for n in nodes:
             temp = n.x-self.x
             if  n.y == self.y and temp < dist and temp < 0:
-                self.up = n
+                self.left = n
+                dist = temp
         return True
     def closestRight(self,nodes):
         dist=float('Inf')
         for n in nodes:
             temp = n.x-self.x
             if  n.y == self.y and temp < dist and temp > 0:
-                self.up = n
+                self.right = n
+                dist = temp
         return True
     
         
@@ -206,4 +211,4 @@ g.createNodes(maze)
 print(g.begin.down)
 print(g.begin.up)
 print(g.begin.left)
-print(g.begin.right)
+print(g.begin.right.up.up)
