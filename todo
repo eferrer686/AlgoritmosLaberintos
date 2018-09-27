@@ -1,0 +1,15 @@
+[x] verificar si acabe
+[x]Ver si estoy en pared
+    [x]regresar a posicion anterior
+    [x]eliminar paso
+[?]Posibles caminos
+[?]Ver si estoy en DeadEnd
+[x]Ver si ya visite
+[]Marcar en donde paso
+[x]Decidir camino
+    [x]eliminar 2
+    [x]preferir 0
+
+[x]Tomar el camino
+
+[Mientras existan 2 o mas camninos disponibles no marcar 2]
