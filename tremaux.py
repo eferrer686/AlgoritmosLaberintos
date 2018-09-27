@@ -1,3 +1,8 @@
+"""
+Eduardo Ferrer Mac Gregor Ruiz	A01651867
+Jorge Akio Olvera Arao 		    A01651395
+Jesús Iván Tapia Romero		    A01338275
+"""
 import sys
 sys.setrecursionlimit(99000)
 
