@@ -1,22 +1,21 @@
-#Algoritmo de Tremaux
 def tremaux():
     path = list()
     currentPos = begin
     prevPos = list([begin])
 
-    
-    
     #0 - U, 1 - R, 2 - D, 3 -L
     dir = 0 
 
     while True:
+
+
         print("path: " + str(path))
         print("----------------------------------")
         print("Current: " + str(currentPos))
         print("Prev: " + str(prevPos))
         print("Dir: " + str(dir))
-        
-        
+
+
 
         x = currentPos[0]
         y = currentPos[1]
@@ -24,91 +23,85 @@ def tremaux():
         #If finish point is reached, return path
         if currentPos[0] == finish[0] and currentPos[1] == finish[1]:
             return path
-        
 
         #Cheks if on a wall or been here before
         posMaze = maze[y][x]
         posVisited = visited[y][x]
-        print("MazePos: " + str(posMaze))
-        print("VisitedPos: " + str(posVisited))
-       
+
         if posMaze == 1 or posVisited ==2:
             #return to prev position
             currentPos = prevPos.pop()
             path.pop()
-            dir = spinDir(currentPos,dir)
-            
+            dir = spinDir(currentPos)
             continue
-
-
         elif posVisited==1:
-            print("mark again")
             visited[y][x]==2
         else:
-            #Agregar en la posicion que ya pasee aqui
-            print("mark")
             visited[y][x]=1
-        
-        
 
         if x != 0 and dir==3:
             prevPos.append(currentPos)
             currentPos = [x-1,y]
-            path.append(["L"])
+            path+="L"
             continue
 
         if x != len(maze) - 1 and dir==1:
             prevPos.append(currentPos)
             currentPos = [x+1,y]
-            path.append(["R"])
+            path+="R"
             continue
 
-        if y != len(maze[0])-1 and dir==2:
-            prevPos.append(currentPos)
-            currentPos = [x,y+1]
-           
-            path.append(["D"])
-            continue
-
-        if y != 0 and dir==0:
+        if y != 0 and dir==2:
             prevPos.append(currentPos)
             currentPos = [x,y-1]
-
-            path.append(["U"])
+           
+            path+="D"
             continue
 
+        if y != len(maze[0])-1 and dir==0:
+            prevPos.append(currentPos)
+            currentPos = [x,y+1]
 
-        
-        dir = reverseDir(currentPos,dir)
+            path+="U"
+            continue
 
-            
-        
-        
-        
-        
-
-def spinDir(currentPos,dir):
-        temp = dir
-        cond=2
-        while cond==2:
-            dir =  switch(dir)
-            cond = checkVisited(currentPos,dir)
-            
-        print(dir)
-        return dir
-
-def reverseDir(currentPos,dir):
-        temp = dir
-        cond=2
-        while cond==2:
-            
-            dir =  reverse(dir)
-            cond = checkVisited(currentPos,dir)
-            
-        print(dir)
-        return dir
+        dir = spinDir(currentPos)
 
 
+
+#Manejo de direcciones
+def turnRigh(x):
+    return {
+        0 : 1,
+        1: 2,
+        2: 3,
+        3: 0
+    }[x]
+def turnLeft(x):
+    return {
+        0 : 3,
+        1: 0,
+        2: 1,
+        3: 2
+    }[x]
+def reverse(x):
+    return {
+        0 : 2,
+        1: 3,
+        2: 0,
+        3: 1
+    }[x]
+def getDir(x):
+    return {
+        0: "Derecha",
+        1: "Arriba",
+        2: "Izquierda",
+        3: "Abajo"
+    }[x]
+
+
+
+#Ver mapa del Laberinto
 def checkMaze(currentPos,dir):
     x = currentPos[0]
     y = currentPos[1]
@@ -129,21 +122,21 @@ def checkMaze(currentPos,dir):
         return maze[y][x]
     if dir==4:
         return maze[y][x]
-    return 1
-    
-    
+    return 2
     
 
+#Ver mapa de lo visitado
 def checkVisited(currentPos,dir):
     x = currentPos[0]
     y = currentPos[1]
-
-   
     
-    if dir==0 and y<size[1]-1:
+    print("Size"+str(size))
+    print(x)
+
+    if dir==0 and y<(size[1]-1):
         y += 1 
         return visited[y][x]
-    if dir == 1 and x<size[0]-1:
+    if dir == 1 and x<(size[0]-1):
         x+=1
         return visited[y][x]
     if dir == 2 and y>0:
@@ -155,34 +148,39 @@ def checkVisited(currentPos,dir):
     if dir == 4:
         return visited[y][x]
         print("local")
-    return 1
+    return 2
 
-#funcion que invierte la direccion
-def switch(x):
-    return {
-        0 : 1,
-        1: 2,
-        2: 3,
-        3: 0
-    }[x]
-def reverse(x):
-    return {
-        0 : 2,
-        1: 3,
-        2: 0,
-        3: 1
-    }[x]
 
-def getDir(x):
-    return {
-        0: "Derecha",
-        1: "Arriba",
-        2: "Izquierda",
-        3: "Abajo"
-    }[x]
+#dar una vuelta y regresar caminos disponibles
+def spinDir(currentPos):
+        pas=[]
 
-import sys
-sys.setrecursionlimit(99000)
+        for dir in range(4):
+            v = checkVisited(currentPos,dir)
+            m = checkMaze(currentPos,dir)
+            print("Dir: " + str(dir))
+            print("V: " + str(v))
+
+            if v!=2 and m != 1:
+                pas.append(dir)
+        print("Passages: " + str(pas))
+        return selectBestDir(currentPos,pas)
+        
+def selectBestDir(currentPos,pas):
+    temp=2
+    dir=4
+    for p in pas:
+        print(str(p)+"-"+str(checkVisited(currentPos,p)))
+        if temp>checkVisited(currentPos,p):
+            temp=checkVisited(currentPos,p)
+            dir = p
+    return dir
+
+
+
+
+#Logica para correr el algoritmo
+
 
 import fileinput
 size = []
@@ -259,9 +257,9 @@ visited = []
 
 
 #Create visited
-for y in range(int(size[0])):
+for y in range(int(size[1])):
     visited.append([])
-    for x in range(int(size[1])):
+    for x in range(int(size[0])):
         visited[y].append(0)
 
 
@@ -287,7 +285,8 @@ for m in maze:
 
 
 path = tremaux()
+final = ""
+for p in path:
+    final+=p
 
-#print(path[::-1])
-
-
+print(final)
