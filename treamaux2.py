@@ -14,11 +14,14 @@ def tremaux():
         print("Current: " + str(currentPos))
         print("Prev: " + str(prevPos))
         print("Dir: " + str(dir))
-
-
-
+        
+        dir = spinDir(currentPos)
         x = currentPos[0]
         y = currentPos[1]
+
+        print("Maze: " + str(maze[y][x]))
+        print("Visited: " + str(visited[y][x]))
+        
 
         #If finish point is reached, return path
         if currentPos[0] == finish[0] and currentPos[1] == finish[1]:
@@ -28,16 +31,21 @@ def tremaux():
         posMaze = maze[y][x]
         posVisited = visited[y][x]
 
-        if posMaze == 1 or posVisited ==2:
+        if posMaze == 1:
             #return to prev position
             currentPos = prevPos.pop()
             path.pop()
             dir = spinDir(currentPos)
             continue
+        elif posVisited ==2:
+            dir = spinDir(currentPos)
         elif posVisited==1:
-            visited[y][x]==2
+            visited[y][x]=2
+            
         else:
             visited[y][x]=1
+
+        setDeadEnd(currentPos)
 
         if x != 0 and dir==3:
             prevPos.append(currentPos)
@@ -65,6 +73,7 @@ def tremaux():
             path+="U"
             continue
 
+        
         dir = spinDir(currentPos)
 
 
@@ -108,10 +117,10 @@ def checkMaze(currentPos,dir):
 
     print((x,y))
     
-    if dir==0 and y<size[1]-1:
+    if dir==0 and y<size[0]-1:
         y += 1 
         return maze[y][x]
-    if dir == 1 and x<size[0]-1:
+    if dir == 1 and x<size[1]-1:
         x+=1
         return maze[y][x]
     if dir == 2 and y>0:
@@ -133,10 +142,10 @@ def checkVisited(currentPos,dir):
     print("Size"+str(size))
     print(x)
 
-    if dir==0 and y<(size[1]-1):
+    if dir==0 and y<(size[0]-1):
         y += 1 
         return visited[y][x]
-    if dir == 1 and x<(size[0]-1):
+    if dir == 1 and x<(size[1]-1):
         x+=1
         return visited[y][x]
     if dir == 2 and y>0:
@@ -176,7 +185,31 @@ def selectBestDir(currentPos,pas):
             dir = p
     return dir
 
+def setDeadEnd(currentPos):
+    x = currentPos[0]
+    y = currentPos[1]
 
+    cont = 0
+
+    l = maze[y][x-1]
+    r = maze[y][x+1]
+    u = maze[y+1][x]
+    d = maze[y-1][x]
+
+    if l == 1 or x==0:
+        cont+=1
+    if r == 1 or x==(size[1]-1):
+        cont+=1
+    if u == 1 or y==0:
+        cont+=1
+    if d == 1 or y==(size[0]-1):
+        cont+=1
+
+    
+    print("#Walls: " + str(cont))
+
+    if cont>2:
+        visited[y][x] = 2
 
 
 #Logica para correr el algoritmo
