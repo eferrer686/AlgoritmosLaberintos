@@ -80,8 +80,11 @@ def adjustCoordinates(coordinates):
 begin = adjustCoordinates(begin)
 finish = adjustCoordinates(finish)
 
+
+
 #Algoritmo de Tremaux
 def tremaux(x, y):
+    
     path = ""
     #If finish point is reached, return true
     if x == finish[0] and y == finish[1]:
@@ -116,8 +119,6 @@ def tremaux(x, y):
             return path + "R"
     return path
 
-#SOLO PARA VISUALIZARLO, BORRAR DESPUÉS
-#Imprimir solución
 
 path = tremaux(begin[0], begin[1])
 
