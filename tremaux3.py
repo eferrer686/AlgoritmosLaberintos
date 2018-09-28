@@ -46,7 +46,7 @@ def spinDir(currentPos,walls,lastDec):
         #down
         if walls[3]==0 and visits[3]!=2:
             pas.append(2)
-        print("Pas :" + str(pas))
+       
         return selectBestDir(currentPos,pas,lastDec)
 def selectBestDir(currentPos,pas,lastDec):
     temp=2
@@ -188,9 +188,7 @@ def tremaux():
         x = currentPos[0]
         y = currentPos[1]
 
-        print((x,y))
-        for v in visited:
-            print(v)
+        
 
         
 
@@ -332,9 +330,7 @@ for y in range(int(size[1])):
         visited[y].append(0)
 
 
-print("size: " + str(size))
-print("Begin: " + str(begin))
-print("Finish: " + str(finish))
+
 
 
 

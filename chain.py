@@ -4,7 +4,7 @@ Jorge Akio Olvera Arao 		    A01651395
 Jesús Iván Tapia Romero		    A01338275
 """
 import sys
-sys.setrecursionlimit(99000)
+sys.setrecursionlimit(100000)
 
 import fileinput
 size = ''
@@ -36,10 +36,7 @@ for line in fileinput.input():
 maze.reverse()
 
 
-#Crear marcador de camino recorrido
-pathTracer = [[0]*len(maze[0]) for _ in range(len(maze))]
-#Crear marcador de camino correcto
-rightPath = [[0]*len(maze[0]) for _ in range(len(maze))]
+
 
 #Funcion que encuentra 2 numeros separados por uno o varios espacios
 def getNumbers(text):
@@ -93,6 +90,9 @@ def printMaze(maze, begin, finish, pathTracer):
         print(row)
 #Algoritmo de Tremaux
 def tremaux(x, y):
+
+
+
     path = ""
     #If finish point is reached, return true
     if x == finish[0] and y == finish[1]:
@@ -150,15 +150,40 @@ def LineaChain(begin,finish):
             ydiff=0
         x1=x1+xdiff
         y1=y1+ydiff
-        current=(y1,x1)
+        current=(x1,y1)
         if maze[x1][y1]==0:
             maze[x1][y1]=4
             path.append(current)
     return path
 
 linea=LineaChain(begin,finish)
-print (linea)
-printMaze(maze, begin, finish, pathTracer)
+
+import numpy as np
+import copy
+#Crear marcador de camino recorrido
+
+emptyArray = np.zeros((len(maze),len(maze[0])))
+
+
+pathTracer = copy.copy(emptyArray)
+#Crear marcador de camino correcto
+rightPath = copy.copy(emptyArray)
+
+
+final = ""
+for l in linea:
+    
+    pathTracer = copy.copy(emptyArray)
+    #Crear marcador de camino correcto
+    rightPath = copy.copy(emptyArray)
+    
+    finish = l
+    final += str(tremaux(begin[0],begin[1]))[::-1]
+    begin = l
+
+    
+print(final)
+
 #SOLO PARA VISUALIZARLO, BORRAR DESPUÉS
 #Imprimir solución
 
